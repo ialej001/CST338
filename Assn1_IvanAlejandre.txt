@@ -1,0 +1,122 @@
+/* Ivan Alejandre
+ * CST 338
+ * 3/6/19
+ * Assignment 1: String Manipulation */
+
+import java.util.Scanner;
+import java.text.DecimalFormat;
+
+public class Assign1 {
+
+   // to be used in part 2
+   public static final int MIN_HOURS = 12;
+   public static final int MAX_HOURS = 20;
+   
+   public static void main(String[] args) {
+      Scanner keyboard = new Scanner(System.in);
+      
+      // Part 1
+      /* This section of code fulfills the requirements for part 1 of this
+       * assignment. The code will prompt the user to input their first
+       * and last name, concatenate them together, then display their name
+       * back to them, along with the length of their combined names, as
+       * well as their name in upper case and lower case.*/
+      
+      String firstName, lastName, fullName;
+      
+      System.out.println("Please enter your first and last name,"
+            + " separated by a space.");
+      System.out.println("Please capitalize each name's" + " first letter.");
+      firstName = keyboard.next();
+      lastName =  keyboard.next();
+      
+      fullName = firstName + " " + lastName;
+      System.out.println("Your name is: " + fullName + ".");
+      
+      int nameLength = firstName.length() + lastName.length();
+      System.out.println("Your name contains " + nameLength + " characters" 
+            + " (whitespace excluded).");
+      
+      String fullNameUpperCase, fullNameLowerCase;
+      fullNameUpperCase = fullName.toUpperCase();
+      fullNameLowerCase = fullName.toLowerCase();
+      System.out.println("Your name in all lower case: " + fullNameLowerCase);
+      System.out.println("Your name in all upper case: " + fullNameUpperCase);
+      
+      // Part 2
+      /* This section of code asks the user to input a double value that 
+       * includes 3 decimal places. Then it will output that number 
+       * formatted to 1 decimal place using the DecimalFormat class. */
+      
+      double studyHours;
+      
+      System.out.println("We have to study between " + MIN_HOURS + " and "
+            + MAX_HOURS + " hours per week.");
+      System.out.println("How many hours do you study per week?");
+      System.out.println("Please enter a number between the stated range with"
+            + " 3 trailing decimal places.");
+      studyHours = keyboard.nextDouble();
+      
+      DecimalFormat pattern0dot0 = new DecimalFormat("#0.0");
+      
+      System.out.println("You've studied " + pattern0dot0.format(studyHours)
+            + " hours.");
+   }
+
+}
+
+/****************************Output********************************************
+ * Run 1:
+Please enter your first and last name, separated by a space.
+Please capitalize each name's first letter.
+John Wick
+Your name is: John Wick.
+Your name contains 8 characters (whitespace excluded).
+Your name in all lower case: john wick
+Your name in all upper case: JOHN WICK
+We have to study between 12 and 20 hours per week.
+How many hours do you study per week?
+Please enter a number between the stated range with 3 trailing decimal places.
+8.625
+You've studied 8.6 hours.
+ * Run 2:
+Please enter your first and last name, separated by a space.
+Please capitalize each name's first letter.
+Sansa StaRK
+Your name is: Sansa StaRK.
+Your name contains 10 characters (whitespace excluded).
+Your name in all lower case: sansa stark
+Your name in all upper case: SANSA STARK
+We have to study between 12 and 20 hours per week.
+How many hours do you study per week?
+Please enter a number between the stated range with 3 trailing decimal places.
+15.782
+You've studied 15.8 hours.
+ * Run 3:
+Please enter your first and last name, separated by a space.
+Please capitalize each name's first letter.
+Rocket
+Racoon
+Your name is: Rocket Racoon.
+Your name contains 12 characters (whitespace excluded).
+Your name in all lower case: rocket racoon
+Your name in all upper case: ROCKET RACOON
+We have to study between 12 and 20 hours per week.
+How many hours do you study per week?
+Please enter a number between the stated range with 3 trailing decimal places.
+15.888888
+You've studied 15.9 hours.
+ * Run 4:
+Please enter your first and last name, separated by a space.
+Please capitalize each name's first letter.
+Steve RoGers
+Your name is: Steve RoGers.
+Your name contains 11 characters (whitespace excluded).
+Your name in all lower case: steve rogers
+Your name in all upper case: STEVE ROGERS
+We have to study between 12 and 20 hours per week.
+How many hours do you study per week?
+Please enter a number between the stated range with 3 trailing decimal places.
+100.55555555
+You've studied 100.6 hours.
+*/

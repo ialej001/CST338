@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".WorkOrders"
+    tools:showIn="@layout/activity_work_orders">
+
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="215dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnPrevious"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:text="Previous"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddress" />
+
+    <Button
+        android:id="@+id/btnNext"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="4dp"
+        android:text="Next"
+        app:layout_constraintEnd_toEndOf="@+id/tvAddress"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddress" />
+
+    <EditText
+        android:id="@+id/etWorkDone"
+        android:layout_width="399dp"
+        android:layout_height="127dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:fadeScrollbars="false"
+        android:clickable="true"
+        android:focusable="auto"
+        android:hint="Work done..."
+        android:maxLines="15"
+        android:minLines="1"
+        android:scrollbars="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnNext" />
+
+    <AutoCompleteTextView
+        android:id="@+id/etPartsUsed"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="148dp"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:focusable="auto"
+        android:hint="Add part: search by description"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/etWorkDone"
+        app:layout_constraintTop_toBottomOf="@+id/btnNext" />
+
+    <Button
+        android:id="@+id/btnClock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Time"
+        app:layout_constraintStart_toStartOf="@+id/etWorkDone"
+        app:layout_constraintTop_toTopOf="@+id/btnFinish" />
+
+    <Button
+        android:id="@+id/btnFinish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Complete Job"
+        app:layout_constraintEnd_toEndOf="@+id/etWorkDone"
+        app:layout_constraintTop_toBottomOf="@+id/tvTechnician" />
+
+    <TextView
+        android:id="@+id/tvArrived"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="412dp"
+        android:text="Arrived:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvDeparted"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:text="Departed:"
+        app:layout_constraintStart_toEndOf="@+id/tvArrived"
+        app:layout_constraintTop_toTopOf="@+id/tvArrived" />
+
+    <TextView
+        android:id="@+id/tvJobInfo"
+        android:layout_width="167dp"
+        android:layout_height="129dp"
+        android:layout_marginStart="8dp"
+        android:fontFamily="sans-serif"
+        app:layout_constraintStart_toEndOf="@+id/tvAddress"
+        app:layout_constraintTop_toTopOf="@+id/tvAddress" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Date:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvArrived" />
+
+    <TextView
+        android:id="@+id/tvTechnician"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:text="Technician:"
+        app:layout_constraintStart_toEndOf="@+id/tvDate"
+        app:layout_constraintTop_toTopOf="@+id/tvDate" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="Subtotal:"
+        android:textAlignment="textEnd"
+        app:layout_constraintStart_toEndOf="@+id/tvDeparted"
+        app:layout_constraintTop_toTopOf="@+id/tvDeparted" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Labor:"
+        android:textAlignment="textEnd"
+        app:layout_constraintStart_toStartOf="@+id/textView12"
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/tvTaxText"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Tax: "
+        android:textAlignment="textEnd"
+        app:layout_constraintStart_toStartOf="@+id/textView13"
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Total:"
+        android:textAlignment="textEnd"
+        app:layout_constraintStart_toStartOf="@+id/tvTaxText"
+        app:layout_constraintTop_toBottomOf="@+id/tvTaxText" />
+
+    <TextView
+        android:id="@+id/tvSubTotalDisplay"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="328dp"
+        app:layout_constraintStart_toStartOf="@+id/etPartsUsed"
+        app:layout_constraintTop_toTopOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/tvLaborDisplay"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/tvSubTotalDisplay"
+        app:layout_constraintTop_toTopOf="@+id/textView13" />
+
+    <TextView
+        android:id="@+id/tvTaxDisplay"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/tvLaborDisplay"
+        app:layout_constraintTop_toTopOf="@+id/tvTaxText" />
+
+    <TextView
+        android:id="@+id/tvTotalDisplay"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/tvTaxDisplay"
+        app:layout_constraintTop_toTopOf="@+id/textView15" />
+
+    <TextView
+        android:id="@+id/tvPartsUsed"
+        android:layout_width="400dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="8dp"
+        android:textSize="12sp"
+        android:typeface="monospace"
+        app:layout_constraintStart_toStartOf="@+id/etPartsUsed"
+        app:layout_constraintTop_toBottomOf="@+id/etPartsUsed" />
+
+    <EditText
+        android:id="@+id/etQuantityUsed"
+        android:layout_width="78dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:ems="10"
+        android:focusable="auto"
+        android:hint="Quantity"
+        android:inputType="number"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/etPartsUsed"
+        app:layout_constraintTop_toTopOf="@+id/etPartsUsed" />
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="63dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="4dp"
+        android:text="add "
+        app:layout_constraintStart_toEndOf="@+id/etQuantityUsed"
+        app:layout_constraintTop_toTopOf="@+id/etQuantityUsed" />
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,499 @@
+/* Ivan Alejandre
+ * CST 338
+ * 3/16/19
+ * Assignment 2: A Casino game utilizing methods, a separate class as well
+ * as the Math library for random functions. */
+
+import java.util.Scanner;
+import java.lang.Math;
+
+public class Assig2 {
+   // declare our input object globally. We'll close it in the main function
+   public static Scanner keyboard = new Scanner(System.in);
+   
+   /* Our only input method. It only filters for valid number input. Assumes
+    * our user only inputs whole numbers and not characters or strings.*/
+   public static int getBet() {
+      boolean validBet = true;
+      int input = 0;
+      
+      while (validBet) {
+         input = keyboard.nextInt();
+         if ((input >= 0) && (input <= 100)) {
+            validBet = false;
+         }
+         else {
+            System.out.print("Invalid entry. Try again. ");
+         }
+      }
+      return input;
+   }
+
+   /* A helper method for the pull method that follows. Knowing that 
+    * Math.random returns a double between 0 and 1, we create our range based
+    * on that. Prompt requires the weighted outcomes to be 50% - BAR, 
+    * 25% - cherries, and 12.5% both space and 7. We don't include the upper
+    * bound number in our expression statements to maintain precise ranges.*/
+   private static String randString() {
+      String stringToReturn = "";
+      double rollDouble = Math.random();
+      
+      if (rollDouble < 0.5) {
+         stringToReturn = "BAR";
+      }
+      else if ((rollDouble < 0.75) && (rollDouble >= 0.5)) {
+         stringToReturn = "cherries";
+      }
+      else if ((rollDouble < 0.875) && (rollDouble >= 0.75)) {
+         stringToReturn = "(space)";
+      }
+      else if ((rollDouble < 1) && (rollDouble >= 0.875)) {
+         stringToReturn = "7";
+      }
+      return stringToReturn;
+   }
+
+   /* Creates a new TripleString object and assigns three random strings*/
+   public static TripleString pull() {
+      TripleString thePull = new TripleString();
+      thePull.setString1(randString());
+      thePull.setString2(randString());
+      thePull.setString3(randString());
+      return thePull;
+   }
+   
+   /* Returns the pay multiplier based on the requirements in the prompt.
+    * Using nested if statements, the method controls for the exact outcomes
+    * required. 3 cherries = 30, 2 cherries with the 3rd string not being a
+    * cherry = 15, 1 cherry not followed by a cherry = 5, 3 BARS = 50, 3 7's
+    * = 100. If nothing satisfies the conditions, returns 0.*/
+   public static int getPayMultiplier(TripleString thePull) {
+      int payMultiplier = 0;
+      String thePull1 = thePull.getString1();
+      String thePull2 = thePull.getString2();
+      String thePull3 = thePull.getString3();
+      
+      if (thePull1.equals("cherries")) {
+         if (thePull1.equals(thePull2)) {
+            if (thePull2.equals(thePull3)) {
+               payMultiplier = 30;
+            }
+            else {
+               payMultiplier = 15;
+            }
+         }
+         else {
+            payMultiplier = 5;
+         }
+      }
+      else if (thePull1.equals("BAR")) {
+         if ((thePull1.equals(thePull2)) && (thePull2.equals(thePull3))) {
+            payMultiplier = 50;
+         }
+      }
+      else if (thePull1.equals("7")) {
+         if ((thePull1.equals(thePull2)) && (thePull2.equals(thePull3))) {
+            payMultiplier = 100;
+         }
+      }
+      return payMultiplier;
+   }
+   
+   /* Displays the results of the pull and either shows the reward, or a
+    * consolation statement based on the winnings amount passed in.*/
+   public static void display(TripleString thePull, int winnings) {
+      System.out.println("\nYou pull the level and see...");
+      System.out.println(thePull.getString1() + "   " + thePull.getString2() 
+      + "   " + thePull.getString3());
+      if (winnings > 0) {
+         System.out.println("Congratulations, you've won: $" + winnings + "!");
+      }
+      else {
+         System.out.println("Sorry, you lost.");
+      }
+   }
+   
+   /* Main class: displays to the user what this program does. Provides output
+    * as needed.*/
+   public static void main(String[] args) {
+      int bet = 1;   //initialize to 1, 0 breaks loop.
+      
+      System.out.println("Welcome to Casino! Don't gamble your life away!");
+      System.out.print("Please enter a dollar amount ranging from 1 to 100 "
+            + "(0 to quit): ");
+      
+      /* Loops through the game until the user decides to stop. If the user 
+       * decides to end, the program will terminate after displaying the
+       * results.*/
+      while (bet != 0) {
+         bet = getBet();
+         TripleString thisPull = pull();
+         
+         if (bet == 0) {
+            System.out.println("\nThanks for playing!");
+            String totalWinnings = thisPull.displayWinnings();
+            System.out.println(totalWinnings);
+            break;
+         }
+         
+         int thisPayMultiplier = getPayMultiplier(thisPull);
+         int winnings = bet * thisPayMultiplier;
+         
+         display(thisPull, winnings);
+         thisPull.saveWinnings(winnings);
+         System.out.print("Your next bet please: ");
+      }
+      
+      keyboard.close();
+      System.exit(0);
+   }
+}
+
+/* This sister class handles the mechanics of each pull. It stores the winnings
+ * of each pull, up to the maximum.*/
+class TripleString {
+   private String string1, string2, string3;
+   public static final int MAX_LEN = 20;
+   public static final int MAX_PULLS = 40;
+   private static int[] pullWinnings = new int[MAX_PULLS];
+   private static int numPulls = 0;
+   
+   public TripleString() {
+      string1 = "";
+      string2 = "";
+      string3 = "";
+   }
+   
+   /* Checks if the string generated is valid.*/
+   private boolean validString(String str) {
+      if ((str != null) && (str.length() <= MAX_LEN)) {
+         return true;
+      }
+      else {
+         return false;
+      }
+   }
+   
+   /* The following six methods are accessors and mutators to the private
+    * variables in this class.*/
+   public boolean setString1(String str) {
+      if (validString(str)) {
+         this.string1 = str;
+         return true;
+      }
+      else {
+         return false;
+      }
+   }
+   
+   public boolean setString2(String str) {
+      if (validString(str)) {
+         this.string2 = str;
+         return true;
+      }
+      else {
+         return false;
+      }
+   }
+   
+   public boolean setString3(String str) {
+      if (validString(str)) {
+         this.string3 = str;
+         return true;
+      }
+      else {
+         return false;
+      }
+   }
+   
+   public String getString1() {
+      return this.string1;
+   }
+   
+   public String getString2() {
+      return this.string2;
+   }
+   
+   public String getString3() {
+      return this.string3;
+   }
+   
+   public String toString() {
+      return (this.string1 + " " + this.string2 + " " + this.string3);
+   }
+   
+   /* Saves the winnings per round into an array. Stops saving data when the
+    * array is full.*/
+   public boolean saveWinnings(int winnings) {
+      if (numPulls >= 40) {
+         return false;
+      }
+      
+      TripleString.pullWinnings[TripleString.numPulls] = winnings;
+      numPulls += 1;
+      return true;
+   }
+   
+   /* Constructs the string to be printed to the user once the game ends.
+    * Loops through the stored winnings in the array with formatting.*/
+   public String displayWinnings() {
+      int totalWinnings = 0;
+      String totalWinningsString = "Your individual winnings are:\n";
+      
+      for (int i=0; i<numPulls; i++) {
+         totalWinningsString += "$" + TripleString.pullWinnings[i] + " ";
+         totalWinnings += TripleString.pullWinnings[i];
+      }
+      
+      if (numPulls == 0) {
+         totalWinningsString += "$0";
+      }
+      
+      totalWinningsString += "\nYour total winnings are:\n$" + totalWinnings;
+      return totalWinningsString;
+   }
+}
+
+/***********************************OUTPUT************************************
+* Welcome to Casino! Don't gamble your life away!
+Please enter a dollar amount ranging from 1 to 100 (0 to quit): -1
+Invalid entry. Try again. 100
+
+You pull the level and see...
+BAR   BAR   BAR
+Congratulations, you've won: $5000!
+Your next bet please: 101
+Invalid entry. Try again. 5
+
+You pull the level and see...
+BAR   (space)   7
+Sorry, you lost.
+Your next bet please: 5
+
+You pull the level and see...
+cherries   cherries   (space)
+Congratulations, you've won: $75!
+Your next bet please: 5
+
+You pull the level and see...
+7   (space)   7
+Sorry, you lost.
+Your next bet please: 5
+
+You pull the level and see...
+BAR   BAR   BAR
+Congratulations, you've won: $250!
+Your next bet please: 5
+
+You pull the level and see...
+cherries   BAR   BAR
+Congratulations, you've won: $25!
+Your next bet please: 
+
+You pull the level and see...
+cherries   7   cherries
+Congratulations, you've won: $25!
+Your next bet please: 5
+
+You pull the level and see...
+cherries   BAR   BAR
+Congratulations, you've won: $25!
+Your next bet please: 
+
+You pull the level and see...
+BAR   cherries   BAR
+Sorry, you lost.
+Your next bet please: 5
+
+You pull the level and see...
+BAR   cherries   7
+Sorry, you lost.
+Your next bet please: 5
+
+You pull the level and see...
+BAR   BAR   BAR
+Congratulations, you've won: $250!
+Your next bet please: 
+
+You pull the level and see...
+BAR   BAR   (space)
+Sorry, you lost.
+Your next bet please: 5
+
+You pull the level and see...
+BAR   BAR   BAR
+Congratulations, you've won: $250!
+Your next bet please: 5
+
+You pull the level and see...
+7   BAR   BAR
+Sorry, you lost.
+Your next bet please: 5
+
+You pull the level and see...
+cherries   cherries   BAR
+Congratulations, you've won: $75!
+Your next bet please: 
+
+You pull the level and see...
+BAR   cherries   BAR
+Sorry, you lost.
+Your next bet please: 5
+
+You pull the level and see...
+cherries   cherries   BAR
+Congratulations, you've won: $75!
+Your next bet please: 
+
+You pull the level and see...
+cherries   cherries   cherries
+Congratulations, you've won: $150!
+Your next bet please: 
+
+You pull the level and see...
+BAR   (space)   BAR
+Sorry, you lost.
+Your next bet please: 5
+
+You pull the level and see...
+(space)   7   BAR
+Sorry, you lost.
+Your next bet please: 
+
+You pull the level and see...
+BAR   BAR   7
+Sorry, you lost.
+Your next bet please: 
+
+You pull the level and see...
+BAR   BAR   7
+Sorry, you lost.
+Your next bet please: 5
+
+You pull the level and see...
+cherries   BAR   cherries
+Congratulations, you've won: $25!
+Your next bet please: 
+
+You pull the level and see...
+BAR   cherries   BAR
+Sorry, you lost.
+Your next bet please: 
+
+You pull the level and see...
+BAR   BAR   BAR
+Congratulations, you've won: $250!
+Your next bet please: 5
+
+You pull the level and see...
+BAR   (space)   (space)
+Sorry, you lost.
+Your next bet please: 
+
+You pull the level and see...
+cherries   cherries   BAR
+Congratulations, you've won: $75!
+Your next bet please: 5
+
+You pull the level and see...
+7   BAR   BAR
+Sorry, you lost.
+Your next bet please: 
+
+You pull the level and see...
+BAR   BAR   BAR
+Congratulations, you've won: $250!
+Your next bet please: 
+
+You pull the level and see...
+cherries   cherries   BAR
+Congratulations, you've won: $75!
+Your next bet please: 
+
+You pull the level and see...
+7   BAR   BAR
+Sorry, you lost.
+Your next bet please: 
+
+You pull the level and see...
+BAR   BAR   cherries
+Sorry, you lost.
+Your next bet please: 
+
+You pull the level and see...
+BAR   7   BAR
+Sorry, you lost.
+Your next bet please: 
+
+You pull the level and see...
+BAR   7   BAR
+Sorry, you lost.
+Your next bet please: 5
+
+You pull the level and see...
+(space)   BAR   BAR
+Sorry, you lost.
+Your next bet please: 5
+
+You pull the level and see...
+cherries   BAR   BAR
+Congratulations, you've won: $25!
+Your next bet please: 
+
+You pull the level and see...
+BAR   cherries   cherries
+Sorry, you lost.
+Your next bet please: 
+
+You pull the level and see...
+(space)   BAR   BAR
+Sorry, you lost.
+Your next bet please: 5
+
+You pull the level and see...
+cherries   cherries   7
+Congratulations, you've won: $75!
+Your next bet please: 5
+
+You pull the level and see...
+BAR   BAR   (space)
+Sorry, you lost.
+Your next bet please: 5
+
+You pull the level and see...
+cherries   7   7
+Congratulations, you've won: $25!
+Your next bet please: 5
+
+You pull the level and see...
+7   (space)   7
+Sorry, you lost.
+Your next bet please: 5
+
+You pull the level and see...
+cherries   BAR   BAR
+Congratulations, you've won: $25!
+Your next bet please: 5
+
+You pull the level and see...
+BAR   7   BAR
+Sorry, you lost.
+Your next bet please: 5
+
+You pull the level and see...
+BAR   (space)   cherries
+Sorry, you lost.
+Your next bet please: 5
+
+You pull the level and see...
+BAR   BAR   cherries
+Sorry, you lost.
+Your next bet please: 0
+
+Thanks for playing!
+Your individual winnings are:
+$5000 $0 $75 $0 $250 $25 $25 $25 $0 $0 $250 $0 $250 $0 $75 $0 $75 $150 $0 $0 
+$0 $0 $25 $0 $250 $0 $75 $0 $250 $75 $0 $0 $0 $0 $0 $25 $0 $0 $75 $0 
+Your total winnings are:
+$6975
+*******************************************************************************/
